@@ -2,19 +2,22 @@
 
 declare(strict_types=1);
 
-namespace teewurst\Pipeline;
+namespace Baron\Pipeline;
 
+use InvalidArgumentException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use teewurst\Pipeline\Pipeline;
+use Psr\Container\NotFoundExceptionInterface;
+use RuntimeException;
 
 /**
  * Class PipelineService
  *
  * @template T
- * @template P of \teewurst\Pipeline\PipelineInterface
+ * @template P of \Baron\Pipeline\PipelineInterface
  * Create Pipeline by config array
- * @package teewurst\Pipeline
- * @author Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline
+ * @author Marek Baron<baron.marek@googlemail.com>
  */
 class PipelineService
 {
@@ -32,7 +35,7 @@ class PipelineService
     {
         $interfaces = class_implements($classFqn);
         if (!class_exists($classFqn) || !$interfaces || !in_array(PipelineInterface::class, $interfaces, true)) {
-            throw new \RuntimeException("$classFqn does not implement \\teewurst\\Pipeline\\PipelineInterface");
+            throw new RuntimeException("$classFqn does not implement \\Baron\\Pipeline\\PipelineInterface");
         }
 
         $pipeline = new $classFqn(self::createRecursive($tasks));
@@ -50,9 +53,15 @@ class PipelineService
      * @param array<mixed>|null $options
      *
      * @return P
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function createPsr11(ContainerInterface $serviceContainer, array $tasks, string $classFqn = Pipeline::class, array $options = null): PipelineInterface
-    {
+    public function createPsr11(
+        ContainerInterface $serviceContainer,
+        array $tasks,
+        string $classFqn = Pipeline::class,
+        array $options = null
+    ): PipelineInterface {
         array_walk_recursive(
             $tasks,
             static function (&$value) use ($serviceContainer) {
@@ -78,7 +87,7 @@ class PipelineService
                 $task = new RecursivePipeline(self::createRecursive($task));
             }
             if (!$task instanceof TaskInterface) {
-                throw new \InvalidArgumentException('A task does not implement teewurst\Pipeline\TaskInterface');
+                throw new InvalidArgumentException('A task does not implement Baron\Pipeline\TaskInterface');
             }
             $tasks[$i] = $task;
         }

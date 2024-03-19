@@ -1,18 +1,19 @@
 <?php
+
 declare(strict_types=1);
 
-namespace teewurst\Pipeline\test\Unit;
+namespace Baron\Pipeline\test\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Baron\Pipeline\PayloadInterface;
+use Baron\Pipeline\Pipeline;
+use Baron\Pipeline\RecursivePipeline;
 use Prophecy\PhpUnit\ProphecyTrait;
-use teewurst\Pipeline\PayloadInterface;
-use teewurst\Pipeline\Pipeline;
-use teewurst\Pipeline\RecursivePipeline;
 
 /**
  * Class RecursivePipelineTest
- * @package teewurst\Pipeline\test\Unit
- * @author Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline\test\Unit
+ * @author Marek Baron<baron.marek@googlemail.com>
  */
 class RecursivePipelineTest extends TestCase
 {

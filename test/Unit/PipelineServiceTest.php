@@ -2,23 +2,34 @@
 
 declare(strict_types=1);
 
-namespace teewurst\Pipeline\test\Unit;
+namespace Baron\Pipeline\test\Unit;
 
+use Baron\Pipeline\Pipeline;
+use Baron\Pipeline\PipelineService;
+use Baron\Pipeline\TaskInterface;
+use InvalidArgumentException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
-use teewurst\Pipeline\Pipeline;
-use teewurst\Pipeline\PipelineService;
-use teewurst\Pipeline\TaskInterface;
 
 /**
  * Class PipelineServiceTest
- * @package teewurst\Pipeline\test\Unit
- * @author Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline\test\Unit
+ * @author Marek Baron<baron.marek@googlemail.com>
  */
 class PipelineServiceTest extends TestCase
 {
-    use ProphecyTrait;
+
+    private PipelineService $pipelineService;
+    private MockObject|TaskInterface $task;
+    private MockObject|ContainerInterface $container;
+
+    public function setUp(): void
+    {
+        $this->pipelineService = new PipelineService();
+        $this->task = $this->createMock(TaskInterface::class);
+        $this->container = $this->createMock(ContainerInterface::class);
+    }
 
     /**
      * @test
@@ -27,9 +38,7 @@ class PipelineServiceTest extends TestCase
     public function checkIfOptionsArePassedIntoPipeline(): void
     {
         $options = ['any' => 'options'];
-
-        $pipelineService = new PipelineService();
-        $pipeline = $pipelineService->create([], Pipeline::class, $options);
+        $pipeline = $this->pipelineService->create([], Pipeline::class, $options);
 
         self::assertSame($options, $pipeline->getOptions());
     }
@@ -40,17 +49,18 @@ class PipelineServiceTest extends TestCase
      */
     public function checkIfPsr11ContainerIsUsedCorrectly(): void
     {
-        $task = $this->prophesize(TaskInterface::class);
-
-        $container = $this->prophesize(ContainerInterface::class);
         $serviceHash = 'any';
-        $container->get($serviceHash)->shouldBeCalled()->willReturn($task->reveal());
+        $this->container
+            ->expects(self::once())
+            ->method('get')
+            ->with($serviceHash)
+            ->willReturn($this->task);
 
-        $pipelineService = new PipelineService();
+        $pipeline = $this->pipelineService->createPsr11($this->container, [$serviceHash]);
 
         self::assertInstanceOf(
             Pipeline::class,
-            $pipelineService->createPsr11($container->reveal(), [$serviceHash])
+            $pipeline
         );
     }
 
@@ -60,10 +70,8 @@ class PipelineServiceTest extends TestCase
      */
     public function checkIfExceptionIsThrownIfInvalidTask(): void
     {
-        $pipelineService = new PipelineService();
+        $this->expectException(InvalidArgumentException::class);
 
-        $this->expectException(\InvalidArgumentException::class);
-
-        $pipelineService->create(['WrongType']);
+        $this->pipelineService->create(['WrongType']);
     }
 }

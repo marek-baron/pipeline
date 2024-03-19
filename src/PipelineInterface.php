@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-namespace teewurst\Pipeline;
+namespace Baron\Pipeline;
 
 /**
  * Interface PipelineInterface
@@ -10,8 +11,8 @@ namespace teewurst\Pipeline;
  *
  * @template T
  *
- * @package teewurst\Pipeline
- * @author  Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline
+ * @author  Marek Baron<baron.marek@googlemail.com>
  */
 interface PipelineInterface
 {
@@ -23,7 +24,7 @@ interface PipelineInterface
      *
      * @return void
      */
-    public function add($task): void;
+    public function add(TaskInterface $task): void;
 
     /**
      * Shifts the currect task from the pipeline, and removes it from execution
@@ -35,12 +36,12 @@ interface PipelineInterface
     /**
      * Start execution of all tasks within the pipeline
      *
-     * @param T $payload Payload to be passed through all tasks
+     * @param PayloadInterface $payload Payload to be passed through all tasks
      *
-     * @phpstan-return T
-     * @return T
+     * @phpstan-return PayloadInterface
+     * @return PayloadInterface
      */
-    public function handle($payload);
+    public function handle(PayloadInterface $payload): PayloadInterface;
 
     /**
      * Set Config for your pipeline, which is accessible from your tasks

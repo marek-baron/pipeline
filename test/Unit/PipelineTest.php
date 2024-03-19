@@ -1,20 +1,21 @@
 <?php
+
 declare(strict_types=1);
 
-namespace teewurst\Pipeline\test\Unit;
+namespace Baron\Pipeline\test\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Baron\Pipeline\PayloadInterface;
+use Baron\Pipeline\Pipeline;
+use Baron\Pipeline\PipelineInterface;
+use Baron\Pipeline\TaskInterface;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
-use teewurst\Pipeline\PayloadInterface;
-use teewurst\Pipeline\Pipeline;
-use teewurst\Pipeline\PipelineInterface;
-use teewurst\Pipeline\TaskInterface;
 
 /**
  * Class PipelineTest
- * @package teewurst\Pipeline\test\Unit
- * @author Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline\test\Unit
+ * @author Marek Baron<baron.marek@googlemail.com>
  */
 class PipelineTest extends TestCase
 {
@@ -107,22 +108,21 @@ class PipelineTest extends TestCase
      */
     public function checkIfOtherExceptionsArePassedThrough(): void
     {
-
         $payload = $this->prophesize(PayloadInterface::class);
 
         $pipeline = new Pipeline();
 
         /** @phpstan-ignore $task */
         $task = $this->getMockBuilder(TaskInterface::class)
-                     ->setMethods([
-                         '__invoke'
-                     ])
-                     ->getMock();
+            ->setMethods([
+                '__invoke'
+            ])
+            ->getMock();
 
         $task->expects($this->once())
-             ->method('__invoke')
-             ->with($payload->reveal(), $pipeline)
-             ->willThrowException(new \Exception('Any exception'));
+            ->method('__invoke')
+            ->with($payload->reveal(), $pipeline)
+            ->willThrowException(new \Exception('Any exception'));
 
         $pipeline->add($task);
 
@@ -187,7 +187,7 @@ class PipelineTest extends TestCase
             $taskMock->__invoke(
                 $payloadMock->reveal(),
                 Argument::type(PipelineInterface::class)
-                )
+            )
                 ->shouldBeCalledTimes(2)
                 ->willThrow(new \Exception('test')); // assertion
 

@@ -1,21 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace teewurst\Pipeline\test\Unit;
+namespace Baron\Pipeline\test\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use teewurst\Pipeline\GenericPayload;
+use Baron\Pipeline\GenericPayload;
 
 /**
  * Class GenericPayloadTest
- * @package teewurst\Pipeline\test\Unit
- * @author Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline\test\Unit
+ * @author Marek Baron<baron.marek@googlemail.com>
  */
 class GenericPayloadTest extends TestCase
 {
-    use ProphecyTrait;
-
     /**
      * @test
      * @return void

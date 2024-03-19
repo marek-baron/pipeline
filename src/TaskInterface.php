@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
-namespace teewurst\Pipeline;
+namespace Baron\Pipeline;
 
 /**
  * Interface TaskInterface
  *
  * @template T
  *
- * @package teewurst\Pipeline
- * @author  Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline
+ * @author  Marek Baron<baron.marek@googlemail.com>
  */
 interface TaskInterface
 {
@@ -17,10 +18,10 @@ interface TaskInterface
     /**
      * Action or single Task to be done in this step
      *
-     * @param T                 $payload  Payload containing all Information necessary for this action
+     * @param PayloadInterface $payload Payload containing all Information necessary for this action
      * @param PipelineInterface<T> $pipeline Pipeline currently executed
      *
-     * @return T
+     * @return PayloadInterface
      */
-    public function __invoke($payload, PipelineInterface $pipeline);
+    public function __invoke(PayloadInterface $payload, PipelineInterface $pipeline): PayloadInterface;
 }

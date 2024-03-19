@@ -1,7 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
-namespace teewurst\Pipeline;
+namespace Baron\Pipeline;
+
+use BadMethodCallException;
 
 /**
  * Class GenericPayloadInterface
@@ -9,13 +12,13 @@ namespace teewurst\Pipeline;
  * Class offering a simple and fast way to provide a payload. Still I urgently recommend to use the PayloadInterface
  * or at least extend and introduce other interfaces for type hinting!
  *
- * @package teewurst\Pipeline
- * @author  Martin Ruf <Martin.F.Ruf@gmail.com>
+ * @package Baron\Pipeline
+ * @author  Marek Baron<baron.marek@googlemail.com>
  */
 class GenericPayload implements PayloadInterface
 {
-    /** @var array<mixed> Contains all keys stored in payload*/
-    private $keystore = [];
+    /** @var array<mixed> Contains all keys stored in payload */
+    private array $keystore = [];
 
     /**
      * Offers Magic accessor to keystore
@@ -24,15 +27,15 @@ class GenericPayload implements PayloadInterface
      * @param array<mixed> $arguments Arguments passed into the function
      *
      * @return mixed
-     * @throws \BadMethodCallException
+     * @throws BadMethodCallException
      */
-    public function __call($name, $arguments)
+    public function __call(string $name, array $arguments)
     {
         if (preg_match('/(?<method>set|get)(?<key>.+)/', $name, $matches)) {
             return $this->{$matches['method']}(strtolower($matches['key']), ...$arguments);
         }
 
-        throw new \BadMethodCallException('Function ' . $name . ' does not exists!');
+        throw new BadMethodCallException('Function ' . $name . ' does not exists!');
     }
 
     /**
@@ -42,7 +45,7 @@ class GenericPayload implements PayloadInterface
      *
      * @return mixed|null
      */
-    private function get($name)
+    private function get(string $name): mixed
     {
         return $this->keystore[$name] ?? null;
     }
@@ -55,7 +58,7 @@ class GenericPayload implements PayloadInterface
      *
      * @return void
      */
-    private function set($key, $value): void
+    private function set(string $key, mixed $value): void
     {
         $this->keystore[$key] = $value;
     }

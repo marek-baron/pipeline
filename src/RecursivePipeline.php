@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-namespace teewurst\Pipeline;
+namespace Baron\Pipeline;
 
 /**
  * Class RecursivePipelineHandler
@@ -12,8 +13,8 @@ namespace teewurst\Pipeline;
  * @extends Pipeline<T>
  * @implements TaskInterface<T>
  *
- * @package teewurst\Pipeline
- * @author  Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline
+ * @author  Marek Baron<baron.marek@googlemail.com>
  */
 class RecursivePipeline extends Pipeline implements TaskInterface
 {
@@ -21,12 +22,12 @@ class RecursivePipeline extends Pipeline implements TaskInterface
     /**
      * Execute internal pipe and pass it to the next handler
      *
-     * @param T  $payload  Payload containing all Information necessary for this action
+     * @param PayloadInterface $payload Payload containing all Information necessary for this action
      * @param PipelineInterface<T> $pipeline Pipeline currently executed
      *
-     * @return T
+     * @return PayloadInterface
      */
-    public function __invoke($payload, PipelineInterface $pipeline)
+    public function __invoke(PayloadInterface $payload, PipelineInterface $pipeline): PayloadInterface
     {
         $this->setOptions($pipeline->getOptions());
         return $pipeline->handle($this->handle($payload));

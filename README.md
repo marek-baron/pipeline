@@ -40,7 +40,7 @@ $tasksFromEnvConfig = $config->getTasks() // somewhere in your config: [Task1::c
 $pipeline = (new PipelineService)->createPsr11($serviceManager, $tasksFromEnvConfig);
 ````
 
-With teewurst/Pipeline you are able to create quite complex tasks in no time:
+With mbaron/Pipeline you are able to create quite complex tasks in no time:
 
 `````PHP
 // Configuration of BiPRO Request (= German XML Request Standard)
@@ -87,7 +87,7 @@ $tasks = [
 ];
 
 // Create Pipeline
-$pipeline = new \teewurst\Pipeline\Pipeline($tasks);
+$pipeline = new \mbaron\Pipeline\Pipeline($tasks);
 
 // Create Payload
 $payload = new ImportPayload();

@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-namespace teewurst\Pipeline;
+namespace Baron\Pipeline;
 
 /**
  * Class Pipeline
@@ -11,16 +12,16 @@ namespace teewurst\Pipeline;
  * @template T
  * @implements PipelineInterface<T>
  *
- * @package teewurst\Pipeline
- * @author  Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline
+ * @author  Marek Baron<baron.marek@googlemail.com>
  */
 trait PipelineTrait
 {
 
     /** @var TaskInterface<T>[] */
-    private $tasks;
+    private array $tasks;
     /** @var array<mixed> */
-    private $options;
+    private array $options;
 
     /**
      * DefaultPipelineTrait constructor.
@@ -39,7 +40,7 @@ trait PipelineTrait
      *
      * @return void
      */
-    public function add($task): void
+    public function add(TaskInterface $task): void
     {
         $this->tasks[] = $task;
     }
@@ -79,12 +80,12 @@ trait PipelineTrait
     /**
      * Start execution of all tasks within the pipeline
      *
-     * @param T $payload Payload to be passed through all tasks
+     * @param PayloadInterface $payload Payload to be passed through all tasks
      *
-     * @return T
-     * @phpstan-return T
+     * @return PayloadInterface
+     * @phpstan-return PayloadInterface
      */
-    public function handle($payload)
+    public function handle(PayloadInterface $payload): PayloadInterface
     {
         $task = $this->next();
 

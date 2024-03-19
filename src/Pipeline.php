@@ -1,7 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-namespace teewurst\Pipeline;
+namespace Baron\Pipeline;
 
 /**
  * Class Pipeline
@@ -11,8 +12,8 @@ namespace teewurst\Pipeline;
  * @template T
  * @implements PipelineInterface<T>
  *
- * @package teewurst\Pipeline
- * @author  Martin Ruf <Martin.Ruf@check24.de>
+ * @package Baron\Pipeline
+ * @author  Marek Baron<baron.marek@googlemail.com>
  */
 class Pipeline implements PipelineInterface
 {
